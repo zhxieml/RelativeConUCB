@@ -1,0 +1,10 @@
+# IDE
+.vscode
+*.code-workspace
+
+# data
+data/
+result/
+
+# Python
+*.pyc
