@@ -20,18 +20,22 @@ class RelativeConUCB(ConUCB):
         picked_suparm_idx, duel_suparm_idx = None, None
         if user_idx not in self.user_idx_map:
             self.add_user(user_idx)
-        user_idx = self.user_idx_map[user_idx]
 
         if self.select_pair_mechanism == "best2":
+            user_idx = self.user_idx_map[user_idx]
             picked_suparm_idx, duel_suparm_idx = self._decide_topk_attributes(user_idx, X_pool, tilde_X, k=2)
         elif self.select_pair_mechanism == "bestrelated2":
+            user_idx = self.user_idx_map[user_idx]
             picked_suparm_idx_raw, duel_suparm_idx_raw = self._decide_topk_attributes(user_idx, X_pool, tilde_X_related, k=2)
             picked_suparm_idx, duel_suparm_idx = related_suparm_idxs[[picked_suparm_idx_raw, duel_suparm_idx_raw]]
         elif self.select_pair_mechanism == "doublebest2":
+            user_idx = self.user_idx_map[user_idx]
             picked_suparm_idx, duel_suparm_idx = self._decide_double_attributes(user_idx, X_pool, tilde_X)
         elif self.select_pair_mechanism == "doublebestrelated2":
+            user_idx = self.user_idx_map[user_idx]
             picked_suparm_idx_raw, duel_suparm_idx_raw = self._decide_double_attributes(user_idx, X_pool, tilde_X_related)
             picked_suparm_idx, duel_suparm_idx = related_suparm_idxs[[picked_suparm_idx_raw, duel_suparm_idx_raw]]
+        # For difference-type algorithms, user_idx is redirected when calling self.decide_attribute().
         elif self.select_pair_mechanism == "bestdiff2":
             assert tilde_X_diff.is_cuda, "bestdiff2 method needs enough GPU memory."
             pair_idx = self.decide_attribute(user_idx, X_pool, tilde_X_diff)
